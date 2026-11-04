@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Questions for Dear</title>
+  <style>
+  @import url('https://fonts.googleapis.com/css2?family=Sarabun:wght@400;500;600;700&display=swap');
+
+  #questions-v2 {
+    --pink: #f3a6c2;
+    --light-pink: #ffd8e6;
+    --text: #fff0f5;
+    --muted: #d9bac8;
+
+    position: relative;
+    width: 100%;
+    max-width: 850px;
+    margin: 35px auto;
+    padding: 35px 22px;
+    overflow: hidden;
+    isolation: isolate;
+    font-family: 'Sarabun', Tahoma, sans-serif;
+    color: var(--text);
+    background: linear-gradient(145deg, #241522, #48243a);
+    border: 1px solid #98647b;
+    border-radius: 22px;
+    box-shadow: 0 15px 45px rgba(0,0,0,.25);
+    box-sizing: border-box;
+  }
+  #questions-v2 * { box-sizing: border-box; font-family: 'Sarabun', Tahoma, sans-serif; }
+
+  #questions-v2 .dear-hearts { position: absolute; inset: 0; overflow: hidden; pointer-events: none; z-index: 0; }
+  #questions-v2 .dear-heart {
+    position: absolute; bottom: -45px; color: #ff8fb5; opacity: 0; font-size: 20px;
+    animation: heartFloatV2 linear infinite; filter: drop-shadow(0 0 7px rgba(255,143,181,.4));
+  }
+  @keyframes heartFloatV2 {
+    0% { transform: translate3d(0, 0, 0) rotate(-15deg) scale(.7); opacity: 0; }
+    15% { opacity: .55; }
+    50% { transform: translate3d(35px, -50vh, 0) rotate(15deg) scale(1); opacity: .45; }
+    85% { opacity: .35; }
+    100% { transform: translate3d(-25px, -105vh, 0) rotate(-20deg) scale(.8); opacity: 0; }
+  }
+
+  #questions-v2 .dear-content { position: relative; z-index: 1; }
+  #questions-v2 .dear-header { text-align: center; margin-bottom: 28px; }
+  #questions-v2 .dear-envelope { font-size: 42px; margin-bottom: 8px; animation: envelopeBeatV2 2s ease-in-out infinite; }
+  @keyframes envelopeBeatV2 { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.12); } }
+  #questions-v2 .dear-header h2 { color: var(--light-pink); font-size: clamp(22px, 4vw, 29px); margin: 0 0 10px; }
+  #questions-v2 .dear-header p { color: var(--muted); font-size: 15px; line-height: 1.9; margin: 0; }
+
+  #questions-v2 .dear-progress { max-width: 600px; margin: 0 auto 25px; }
+  #questions-v2 .progress-info { display: flex; justify-content: space-between; gap: 10px; margin-bottom: 10px; font-size: 13px; color: var(--light-pink); }
+  #questions-v2 .progress-track { width: 100%; height: 9px; background: rgba(255,255,255,.15); border-radius: 20px; overflow: hidden; }
+  #questions-v2 #progressFillV2 { height: 100%; width: 16.67%; background: linear-gradient(90deg, #df83a7, #ffc3d6); border-radius: 20px; transition: width .4s ease; }
+
+  #questions-v2 .question-stage { max-width: 650px; margin: auto; }
+  #questions-v2 .question-card {
+    padding: 28px 24px; min-height: 310px; background: rgba(255,255,255,.075);
+    border: 1px solid rgba(255,190,215,.4); border-radius: 18px; backdrop-filter: blur(5px);
+  }
+  #questions-v2 .question-label { color: var(--pink); font-size: 12px; font-weight: 700; letter-spacing: 2px; }
+  #questions-v2 .question-card h3 { color: var(--light-pink); font-size: 20px; line-height: 1.8; margin: 14px 0 22px; }
+  #questions-v2 .answer-list { display: grid; gap: 11px; }
+  #questions-v2 .answer-list button {
+    width: 100%; min-height: 50px; padding: 12px 15px; border: 1px solid #a8758d; border-radius: 11px;
+    background: rgba(255,255,255,.07); color: var(--text); font-size: 15px; line-height: 1.6; text-align: left; cursor: pointer; transition: .2s;
+  }
+  #questions-v2 .answer-list button:hover { background: rgba(243,166,194,.2); border-color: var(--pink); }
+  #questions-v2 .answer-list button.selected { background: var(--pink); border-color: var(--light-pink); color: #351b2a; font-weight: 700; }
+  #questions-v2 .select-hint { color: var(--muted); text-align: center; font-size: 13px; margin: 18px 0 0; }
+
+  #questions-v2 .question-navigation { display: flex; justify-content: space-between; gap: 12px; margin-top: 20px; }
+  #questions-v2 .question-navigation button { min-height: 47px; padding: 10px 18px; border-radius: 12px; font-size: 14px; cursor: pointer; transition: .2s; }
+  #questions-v2 .nav-back { background: transparent; color: var(--light-pink); border: 1px solid #a8758d; }
+  #questions-v2 .nav-next { background: var(--pink); color: #351b2a; border: 1px solid var(--pink); font-weight: 700; margin-left: auto; }
+  #questions-v2 .question-navigation button:disabled { opacity: .35; cursor: not-allowed; }
+
+  #questions-v2 .dear-finish { max-width: 600px; margin: 15px auto 0; padding: 30px 22px; text-align: center; background: rgba(255,255,255,.07); border: 1px solid #b77b91; border-radius: 18px; }
+  #questions-v2 .dear-finish[hidden] { display: none !important; }
+  #questions-v2 .finish-heart { font-size: 55px; animation: envelopeBeatV2 1.5s infinite; }
+  #questions-v2 .dear-finish h2 { color: var(--light-pink); font-size: 27px; }
+  #questions-v2 .dear-finish p, #questions-v2 .finish-message { color: var(--muted); font-size: 15px; line-height: 2; }
+  #questions-v2 .finish-message { padding: 17px; margin: 20px 0; color: var(--light-pink); background: rgba(243,166,194,.1); border-radius: 12px; }
+  </style>
+</head>
+<body>
+
+<section class="dear-questions" id="questions-v2">
+  <div class="dear-hearts" id="dearHeartsV2" aria-hidden="true"></div>
+  <div class="dear-content">
+    <header class="dear-header">
+      <div class="dear-envelope">💌</div>
+      <h2>มีบางอย่างอยากถามเดียร์</h2>
+      <p>เราอยากเข้าใจความรู้สึกของเธอ<br>ค่อย ๆ ตอบก็ได้นะ ไม่ต้องรีบเลย</p>
+    </header>
+
+    <div class="dear-progress">
+      <div class="progress-info">
+        <span id="questionCountV2">คำถามที่ 1 จาก 6</span>
+        <span id="progressPercentV2">17%</span>
+      </div>
+      <div class="progress-track">
+        <div id="progressFillV2"></div>
+      </div>
+    </div>
+
+    <div class="question-stage" id="questionStageV2">
+      <div class="question-card">
+        <span class="question-label" id="questionLabelV2">QUESTION 01</span>
+        <h3 id="questionTitleV2">เดียร์ยังจำช่วงเวลาที่เราเคยมีความสุขด้วยกันได้ไหม?</h3>
+        <div class="answer-list" id="answerListV2"></div>
+        <p class="select-hint">เลือกคำตอบที่ตรงกับความรู้สึกของเดียร์ได้เลย 🤍</p>
+      </div>
+
+      <div class="question-navigation">
+        <button type="button" id="prevQuestionV2" class="nav-back" disabled>← ย้อนกลับ</button>
+        <button type="button" id="nextQuestionV2" class="nav-next" disabled>คำถามถัดไป →</button>
+      </div>
+    </div>
+
+    <div class="dear-finish" id="dearFinishV2" hidden>
+      <div class="finish-heart">💗</div>
+      <h2>ขอบคุณนะเดียร์</h2>
+      <p>
+        ขอบคุณที่ยอมตอบคำถามของเรา<br>
+        ไม่ว่าคำตอบจะเป็นแบบไหน<br>
+        เราจะเคารพความรู้สึกของเธอเสมอ
+      </p>
+      <div class="finish-message">
+        เราไม่ได้ต้องการบังคับให้เธอกลับมา<br>
+        แค่อยากขอโอกาสกลับมาคุยกันอีกครั้ง<br>
+        ถ้าเธอยังไม่พร้อม เราก็เข้าใจนะ 🤍
+      </div>
+    </div>
+  </div>
+</section>
+
+<script>
+(() => {
+  const root = document.getElementById('questions-v2');
+  if (!root || root.dataset.initialized === 'true') return;
+  root.dataset.initialized = 'true';
+
+  const questions = [
+    { title: 'เดียร์ยังจำช่วงเวลาที่เราเคยมีความสุขด้วยกันได้ไหม?', answers: ['❤️ ยังจำได้เสมอ', '🥺 จำได้ แต่ไม่อยากย้อนกลับไป', '🤍 ขอไม่ตอบ'] },
+    { title: 'เดียร์เคยคิดถึงช่วงเวลาของเราบ้างไหม?', answers: ['คิดถึงบ้างบางครั้ง', 'เคยคิดถึงเหมือนกัน', 'ไม่แล้ว'] },
+    { title: 'เดียร์พอจะให้อภัยเราได้ไหม?', answers: ['ให้อภัยได้', 'ขอเวลาอีกหน่อย', 'ยังทำไม่ได้'] },
+    { title: 'ถ้าเราเริ่มต้นจากการเป็นคนคุยกันใหม่ เดียร์โอเคไหม?', answers: ['ลองดูก็ได้', 'ขอเวลาคิดก่อน', 'ไม่ดีกว่า'] },
+    { title: 'เดียร์อยากให้เราเปลี่ยนแปลงอะไรบ้าง?', answers: ['รับฟังกันให้มากขึ้น', 'ใส่ใจกันมากกว่าเดิม', 'พูดคุยกันตรง ๆ', 'ซื่อสัตย์ให้มากกว่านี้'] },
+    { title: 'เดียร์ยังอยากให้เรามีโอกาสอยู่ในชีวิตไหม?', answers: ['อยากให้ยังคุยกัน', 'เป็นพี่น้องกันก็พอ', 'ขอแยกย้ายกันไปเติบโต'] }
+  ];
+
+  const answers = {};
+  let current = 0;
+
+  const title = root.querySelector('#questionTitleV2');
+  const label = root.querySelector('#questionLabelV2');
+  const answerList = root.querySelector('#answerListV2');
+  const count = root.querySelector('#questionCountV2');
+  const percent = root.querySelector('#progressPercentV2');
+  const fill = root.querySelector('#progressFillV2');
+  const prev = root.querySelector('#prevQuestionV2');
+  const next = root.querySelector('#nextQuestionV2');
+  const stage = root.querySelector('#questionStageV2');
+  const finish = root.querySelector('#dearFinishV2');
+
+  function renderQuestion() {
+    const q = questions[current];
+    const selected = answers[current];
+    const progress = Math.round(((current + 1) / questions.length) * 100);
+
+    title.textContent = q.title;
+    label.textContent = 'QUESTION ' + String(current + 1).padStart(2, '0');
+    count.textContent = 'คำถามที่ ' + (current + 1) + ' จาก ' + questions.length;
+    percent.textContent = progress + '%';
+    fill.style.width = progress + '%';
+
+    answerList.innerHTML = '';
+    q.answers.forEach(answer => {
+      const button = document.createElement('button');
+      button.type = 'button';
+      button.textContent = answer;
+      if (selected === answer) {
+        button.classList.add('selected');
+        button.setAttribute('aria-pressed', 'true');
+      } else {
+        button.setAttribute('aria-pressed', 'false');
+      }
+      button.addEventListener('click', () => {
+        answers[current] = answer;
+        renderQuestion();
+      });
+      answerList.appendChild(button);
+    });
+
+    prev.disabled = current === 0;
+    next.disabled = !answers[current];
+    next.textContent = current === questions.length - 1 ? 'ดูข้อความสุดท้าย 💗' : 'คำถามถัดไป →';
+  }
+
+  next.addEventListener('click', () => {
+    if (!answers[current]) return;
+    if (current < questions.length - 1) {
+      current++;
+      renderQuestion();
+    } else {
+      stage.hidden = true;
+      root.querySelector('.dear-progress').hidden = true;
+      finish.hidden = false;
+    }
+  });
+
+  prev.addEventListener('click', () => {
+    if (current > 0) {
+      current--;
+      renderQuestion();
+    }
+  });
+
+  const heartLayer = root.querySelector('#dearHeartsV2');
+  const heartSymbols = ['♡', '♥', '💕', '💗', '❤'];
+  for (let i = 0; i < 18; i++) {
+    const heart = document.createElement('span');
+    heart.className = 'dear-heart';
+    heart.textContent = heartSymbols[i % heartSymbols.length];
+    heart.style.left = (Math.random() * 100) + '%';
+    heart.style.fontSize = (12 + Math.random() * 19) + 'px';
+    heart.style.animationDuration = (9 + Math.random() * 13) + 's';
+    heart.style.animationDelay = (-Math.random() * 20) + 's';
+    heartLayer.appendChild(heart);
+  }
+
+  renderQuestion();
+})();
+</script>
+
+</body>
+</html>
